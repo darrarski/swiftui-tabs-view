@@ -1,17 +1,80 @@
 import SwiftUI
 
-public struct TabsView: View {
-  public init() {}
+/// Displays content for selected tab and allows switching between provided tabs.
+public struct TabsView<Tab, TabContent, TabsBar>: View
+where Tab: Equatable & Identifiable,
+      TabContent: View,
+      TabsBar: View
+{
+  /// Create tabs.
+  ///
+  /// - Parameters:
+  ///   - tabs: Array of tabs.
+  ///   - selectedTab: Currently selected tab.
+  ///   - ignoresKeyboard: Determines if tabs bar should be covered by keyboard. Default is `true`.
+  ///   - frameChangeAnimation: Animation to be used for frame changes. Default is `Animation.default`.
+  ///   - tabsBar: Returns tabs bar view for provided tabs and selected tab.
+  ///   - content: Retruns content view for provided tab.
+  public init(
+    tabs: [Tab],
+    selectedTab: Binding<Tab>,
+    ignoresKeyboard: Bool = true,
+    frameChangeAnimation: Animation? = .default,
+    @ViewBuilder tabsBar: @escaping ([Tab], Binding<Tab>) -> TabsBar,
+    @ViewBuilder content: @escaping (Tab) -> TabContent
+  ) {
+    self.tabs = tabs
+    self._selectedTab = selectedTab
+    self.ignoresKeyboard = ignoresKeyboard
+    self.frameChangeAnimation = frameChangeAnimation
+    self.tabsBar = tabsBar
+    self.content = content
+  }
+
+  var tabs: [Tab]
+  @Binding var selectedTab: Tab
+  var ignoresKeyboard: Bool
+  var frameChangeAnimation: Animation?
+  var tabsBar: ([Tab], Binding<Tab>) -> TabsBar
+  var content: (Tab) -> TabContent
+
+  @State var contentFrame: CGRect = .zero
+  @State var tabsBarFrame: CGRect = .zero
+
+  var bottomSafeAreaSize: CGSize {
+    contentFrame.intersection(tabsBarFrame).size
+  }
 
   public var body: some View {
-    Text("TabsView")
-  }
-}
+    ZStack {
+      content(selectedTab)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .safeAreaInset(edge: .bottom) {
+          Color.clear.frame(
+            width: max(0, bottomSafeAreaSize.width),
+            height: max(0, bottomSafeAreaSize.height)
+          )
+        }
+        .geometryReader(
+          geometry: { $0.frame(in: .global) },
+          onChange: { frame in
+            withAnimation(frameChangeAnimation) {
+              contentFrame = frame
+            }
+          }
+        )
 
-#if DEBUG
-struct TabsView_Previews: PreviewProvider {
-  static var previews: some View {
-    TabsView()
+      tabsBar(tabs, $selectedTab)
+        .geometryReader(
+          geometry: { $0.frame(in: .global) },
+          onChange: { frame in
+            withAnimation(frameChangeAnimation) {
+              tabsBarFrame = frame
+            }
+          }
+        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .ignoresSafeArea(.keyboard, edges: ignoresKeyboard ? .bottom : [])
+    }
   }
 }
-#endif
