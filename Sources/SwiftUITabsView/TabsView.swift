@@ -38,46 +38,13 @@ where Tab: Equatable & Identifiable,
   var tabsBar: ([Tab], Binding<Tab>) -> TabsBar
   var content: (Tab) -> TabContent
 
-  @State var contentFrame: CGRect?
-  @State var tabsBarFrame: CGRect?
-
-  var bottomSafeAreaSize: CGSize {
-    guard let contentFrame = contentFrame,
-          let tabsBarFrame = tabsBarFrame
-    else { return .zero }
-    return contentFrame.intersection(tabsBarFrame).size
-  }
-
   public var body: some View {
-    ZStack {
-      content(selectedTab)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .safeAreaInset(edge: .bottom) {
-          Color.clear.frame(
-            width: max(0, bottomSafeAreaSize.width),
-            height: max(0, bottomSafeAreaSize.height)
-          )
-        }
-        .geometryReader(
-          geometry: { $0.frame(in: .global) },
-          onChange: { frame in
-            withAnimation(contentFrame == nil ? .none : frameChangeAnimation) {
-              contentFrame = frame
-            }
-          }
-        )
-
-      tabsBar(tabs, $selectedTab)
-        .geometryReader(
-          geometry: { $0.frame(in: .global) },
-          onChange: { frame in
-            withAnimation(tabsBarFrame == nil ? .none : frameChangeAnimation) {
-              tabsBarFrame = frame
-            }
-          }
-        )
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-        .ignoresSafeArea(.keyboard, edges: ignoresKeyboard ? .bottom : [])
-    }
+    content(selectedTab)
+      .bottomBar(
+        ignoresKeyboard: ignoresKeyboard,
+        frameChangeAnimation: frameChangeAnimation
+      ) {
+        tabsBar(tabs, $selectedTab)
+      }
   }
 }
