@@ -31,7 +31,6 @@ struct ContentView: View {
       frameChangeAnimation: /* Animation? */,
       tabsBar: /* @ViewBuilder @escaping ([Tab], Binding<Tab>) -> TabsBar */,
       content: /* @ViewBuilder @escaping (Tab) -> TabContent */
-      }
     )
   }
 }
