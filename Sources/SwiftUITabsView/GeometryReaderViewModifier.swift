@@ -5,14 +5,14 @@ extension View {
     geometry: @escaping (GeometryProxy) -> Geometry,
     onChange: @escaping (Geometry) -> Void
   ) -> some View {
-    modifier(GeometryReaderModifier(
+    modifier(GeometryReaderViewModifier(
       geometry: geometry,
       onChange: onChange
     ))
   }
 }
 
-struct GeometryReaderModifier<Geometry: Codable>: ViewModifier {
+struct GeometryReaderViewModifier<Geometry: Codable>: ViewModifier {
   var geometry: (GeometryProxy) -> Geometry
   var onChange: (Geometry) -> Void
 
