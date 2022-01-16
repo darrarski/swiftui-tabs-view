@@ -38,11 +38,14 @@ where Tab: Equatable & Identifiable,
   var tabsBar: ([Tab], Binding<Tab>) -> TabsBar
   var content: (Tab) -> TabContent
 
-  @State var contentFrame: CGRect = .zero
-  @State var tabsBarFrame: CGRect = .zero
+  @State var contentFrame: CGRect?
+  @State var tabsBarFrame: CGRect?
 
   var bottomSafeAreaSize: CGSize {
-    contentFrame.intersection(tabsBarFrame).size
+    guard let contentFrame = contentFrame,
+          let tabsBarFrame = tabsBarFrame
+    else { return .zero }
+    return contentFrame.intersection(tabsBarFrame).size
   }
 
   public var body: some View {
@@ -58,7 +61,7 @@ where Tab: Equatable & Identifiable,
         .geometryReader(
           geometry: { $0.frame(in: .global) },
           onChange: { frame in
-            withAnimation(frameChangeAnimation) {
+            withAnimation(contentFrame == nil ? .none : frameChangeAnimation) {
               contentFrame = frame
             }
           }
@@ -68,7 +71,7 @@ where Tab: Equatable & Identifiable,
         .geometryReader(
           geometry: { $0.frame(in: .global) },
           onChange: { frame in
-            withAnimation(frameChangeAnimation) {
+            withAnimation(tabsBarFrame == nil ? .none : frameChangeAnimation) {
               tabsBarFrame = frame
             }
           }
