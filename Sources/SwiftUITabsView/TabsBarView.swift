@@ -28,10 +28,10 @@ where Tab: Equatable & Identifiable,
   public static func `default`<Label: View>(
     @ViewBuilder barItemLabel: @escaping (Tab, Bool) -> Label
   ) -> ([Tab], Binding<Tab>) -> TabsBarView<Tab, BarItem>
-  where BarItem == TabBarItemView<Tab, Label>
+  where BarItem == TabsBarItemView<Tab, Label>
   {
     TabsBarView.default(
-      barItem: TabBarItemView.default(
+      barItem: TabsBarItemView.default(
         label: barItemLabel
       )
     )

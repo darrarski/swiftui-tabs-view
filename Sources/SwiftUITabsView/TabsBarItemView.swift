@@ -1,19 +1,19 @@
 import SwiftUI
 
-/// Tab bar item representing provided tab with a given label.
-public struct TabBarItemView<Tab, Label>: View
+/// Tabs bar item representing provided tab with a given label.
+public struct TabsBarItemView<Tab, Label>: View
 where Tab: Equatable,
       Label: View
 {
-  /// Default tab bar item with provided label closure.
+  /// Default tabs bar item with provided label closure.
   ///
   /// - Parameter label: Closure that returns label for provided tab and its selected state.
   /// - Returns: Closure that returns tab bar item for provided tab and its selected state.
   public static func `default`(
     @ViewBuilder label: @escaping (Tab, Bool) -> Label
-  ) -> (Tab, Binding<Tab>) -> TabBarItemView<Tab, Label> {
+  ) -> (Tab, Binding<Tab>) -> TabsBarItemView<Tab, Label> {
     { tab, selectedTab in
-      TabBarItemView(
+      TabsBarItemView(
         tab: tab,
         selectedTab: selectedTab,
         label: label
@@ -21,7 +21,7 @@ where Tab: Equatable,
     }
   }
 
-  /// Create tab bar item.
+  /// Create tabs bar item.
   ///
   /// - Parameters:
   ///   - tab: Tab for the item.
