@@ -29,6 +29,7 @@ struct ContentView: View {
     TabsView(
       tabs: /* [Tab]  */,
       selectedTab: /* Binding<Tab> */,
+      barPosition: /* ToolbarPosition */,
       ignoresKeyboard: /* Bool */,
       frameChangeAnimation: /* Animation? */,
       tabsBar: /* @ViewBuilder @escaping ([Tab], Binding<Tab>) -> TabsBar */,
