@@ -11,6 +11,7 @@ where Tab: Equatable & Identifiable,
   /// - Parameters:
   ///   - tabs: Array of tabs.
   ///   - selectedTab: Currently selected tab.
+  ///   - tabsPosition: Describes position of the tabs bar. Default is `.bottom`.
   ///   - ignoresKeyboard: Determines if tabs bar should be covered by keyboard. Default is `true`.
   ///   - frameChangeAnimation: Animation to be used for frame changes. Default is `Animation.default`.
   ///   - tabsBar: Returns tabs bar view for provided tabs and selected tab.
@@ -18,6 +19,7 @@ where Tab: Equatable & Identifiable,
   public init(
     tabs: [Tab],
     selectedTab: Binding<Tab>,
+    tabsPosition: ToolbarPosition = .bottom,
     ignoresKeyboard: Bool = true,
     frameChangeAnimation: Animation? = .default,
     @ViewBuilder tabsBar: @escaping ([Tab], Binding<Tab>) -> TabsBar,
@@ -25,6 +27,7 @@ where Tab: Equatable & Identifiable,
   ) {
     self.tabs = tabs
     self._selectedTab = selectedTab
+    self.tabsPosition = tabsPosition
     self.ignoresKeyboard = ignoresKeyboard
     self.frameChangeAnimation = frameChangeAnimation
     self.tabsBar = tabsBar
@@ -33,6 +36,7 @@ where Tab: Equatable & Identifiable,
 
   var tabs: [Tab]
   @Binding var selectedTab: Tab
+  var tabsPosition: ToolbarPosition
   var ignoresKeyboard: Bool
   var frameChangeAnimation: Animation?
   var tabsBar: ([Tab], Binding<Tab>) -> TabsBar
@@ -40,7 +44,8 @@ where Tab: Equatable & Identifiable,
 
   public var body: some View {
     content(selectedTab)
-      .bottomBar(
+      .toolbar(
+        position: tabsPosition,
         ignoresKeyboard: ignoresKeyboard,
         frameChangeAnimation: frameChangeAnimation
       ) {
