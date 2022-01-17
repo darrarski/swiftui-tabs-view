@@ -103,7 +103,7 @@ struct ExampleTabView: View {
         .frame(width: proxy.size.width, height: proxy.size.height)
       }
     }
-    .background(tab.color.ignoresSafeArea())
+    .background(tab.color.saturation(1/3).ignoresSafeArea())
   }
 }
 
