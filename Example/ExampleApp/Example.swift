@@ -49,17 +49,20 @@ enum ExampleTab: String, Equatable, Identifiable, CaseIterable {
 struct ExampleTabView: View {
   init(
     tab: ExampleTab,
+    barPosition: Binding<ToolbarPosition>,
     ignoreKeyboard: Binding<Bool>,
     animateFrameChanges: Binding<Bool>,
     text: Binding<String>
   ) {
     self.tab = tab
+    self._barPosition = barPosition
     self._ignoreKeyboard = ignoreKeyboard
     self._animateFrameChanges = animateFrameChanges
     self._text = text
   }
 
   var tab: ExampleTab
+  @Binding var barPosition: ToolbarPosition
   @Binding var ignoreKeyboard: Bool
   @Binding var animateFrameChanges: Bool
   @Binding var text: String
@@ -71,16 +74,22 @@ struct ExampleTabView: View {
           Text(tab.title)
             .font(.largeTitle)
 
-          Spacer()
+          Picker("Tabs bar position", selection: $barPosition) {
+            Text("Bottom").tag(ToolbarPosition.bottom)
+            Text("Top").tag(ToolbarPosition.top)
+          }
+          .pickerStyle(.segmented)
 
           #if os(iOS)
           Toggle("Ignore keyboard", isOn: $ignoreKeyboard.animation(
             animateFrameChanges ? .default : .none
           ))
           Toggle("Animate frame changes", isOn: $animateFrameChanges)
+          #endif
 
           Spacer()
 
+          #if os(iOS)
           TextField("Text", text: $text)
           #endif
         }
@@ -98,6 +107,7 @@ struct ExampleTabView: View {
 
 struct ExampleTabsView: View {
   @State var selectedTab: ExampleTab = .red
+  @State var tabsPosition: ToolbarPosition = .bottom
   @State var ignoreKeyboard: Bool = true
   @State var animateFrameChanges: Bool = true
   @State var texts: [ExampleTab: String] = [:]
@@ -108,6 +118,7 @@ struct ExampleTabsView: View {
     TabsView(
       tabs: ExampleTab.allCases,
       selectedTab: $selectedTab,
+      barPosition: tabsPosition,
       ignoresKeyboard: ignoreKeyboard,
       frameChangeAnimation: animateFrameChanges ? .default : .none,
       tabsBar: TabsBarView.default { tab, isSelected in
@@ -123,6 +134,7 @@ struct ExampleTabsView: View {
       content: { tab in
         ExampleTabView(
           tab: tab,
+          barPosition: $tabsPosition.animation(),
           ignoreKeyboard: $ignoreKeyboard,
           animateFrameChanges: $animateFrameChanges,
           text: .init(

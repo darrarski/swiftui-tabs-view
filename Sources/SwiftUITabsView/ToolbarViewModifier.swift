@@ -1,12 +1,37 @@
 import SwiftUI
 
+/// Describes position of the toolbar.
+public enum ToolbarPosition: Equatable {
+  /// Bar positioned above the content.
+  case top
+
+  /// Tabs bar positioned below the content.
+  case bottom
+
+  var verticalEdge: VerticalEdge {
+    switch self {
+    case .top: return .top
+    case .bottom: return .bottom
+    }
+  }
+
+  var frameAlignment: Alignment {
+    switch self {
+    case .top: return .top
+    case .bottom: return .bottom
+    }
+  }
+}
+
 extension View {
-  func bottomBar<Bar: View>(
+  func toolbar<Bar: View>(
+    position: ToolbarPosition = .bottom,
     ignoresKeyboard: Bool = true,
     frameChangeAnimation: Animation? = .default,
     @ViewBuilder bar: @escaping () -> Bar
   ) -> some View {
-    modifier(BottomBarViewModifier(
+    modifier(ToolbarViewModifier(
+      position: position,
       ignoresKeyboard: ignoresKeyboard,
       frameChangeAnimation: frameChangeAnimation,
       bar: bar
@@ -14,17 +39,20 @@ extension View {
   }
 }
 
-struct BottomBarViewModifier<Bar: View>: ViewModifier {
+struct ToolbarViewModifier<Bar: View>: ViewModifier {
   init(
+    position: ToolbarPosition = .bottom,
     ignoresKeyboard: Bool = true,
     frameChangeAnimation: Animation? = .default,
     @ViewBuilder bar: @escaping () -> Bar
   ) {
+    self.position = position
     self.ignoresKeyboard = ignoresKeyboard
     self.frameChangeAnimation = frameChangeAnimation
     self.bar = bar
   }
 
+  var position: ToolbarPosition
   var ignoresKeyboard: Bool
   var frameChangeAnimation: Animation?
   var bar: () -> Bar
@@ -32,7 +60,7 @@ struct BottomBarViewModifier<Bar: View>: ViewModifier {
   @State var contentFrame: CGRect?
   @State var tabsBarFrame: CGRect?
 
-  var bottomSafeAreaSize: CGSize {
+  var barSafeArea: CGSize {
     guard let contentFrame = contentFrame,
           let tabsBarFrame = tabsBarFrame
     else { return .zero }
@@ -44,14 +72,22 @@ struct BottomBarViewModifier<Bar: View>: ViewModifier {
     return size
   }
 
+  var keyboardSafeAreaEdges: Edge.Set {
+    guard ignoresKeyboard else { return [] }
+    switch position {
+    case .top: return .top
+    case .bottom: return .bottom
+    }
+  }
+
   func body(content: Content) -> some View {
     ZStack {
       content
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .safeAreaInset(edge: .bottom) {
+        .safeAreaInset(edge: position.verticalEdge) {
           Color.clear.frame(
-            width: bottomSafeAreaSize.width,
-            height: bottomSafeAreaSize.height
+            width: barSafeArea.width,
+            height: barSafeArea.height
           )
         }
         .geometryReader(
@@ -72,14 +108,14 @@ struct BottomBarViewModifier<Bar: View>: ViewModifier {
             }
           }
         )
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-        .ignoresSafeArea(.keyboard, edges: ignoresKeyboard ? .bottom : [])
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: position.frameAlignment)
+        .ignoresSafeArea(.keyboard, edges: keyboardSafeAreaEdges)
     }
   }
 }
 
 #if DEBUG
-struct BottomBarViewModifier_Previews: PreviewProvider {
+struct ToolbarViewModifier_Previews: PreviewProvider {
   static var previews: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 0) {
@@ -93,7 +129,7 @@ struct BottomBarViewModifier_Previews: PreviewProvider {
         }
       }
     }
-    .bottomBar(ignoresKeyboard: true) {
+    .toolbar(ignoresKeyboard: true) {
       Text("Bottom Bar")
         .padding()
         .frame(maxWidth: .infinity)
