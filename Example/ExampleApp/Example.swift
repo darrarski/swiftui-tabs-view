@@ -47,10 +47,6 @@ enum ExampleTab: String, Equatable, Identifiable, CaseIterable {
 }
 
 struct ExampleTabView: View {
-  enum Focused: Hashable {
-    case text
-  }
-
   init(
     tab: ExampleTab,
     ignoreKeyboard: Binding<Bool>,
@@ -67,7 +63,6 @@ struct ExampleTabView: View {
   @Binding var ignoreKeyboard: Bool
   @Binding var animateFrameChanges: Bool
   @Binding var text: String
-  @FocusState var focused: Focused?
 
   var body: some View {
     GeometryReader { proxy in
@@ -84,15 +79,9 @@ struct ExampleTabView: View {
           ))
           Toggle("Animate frame changes", isOn: $animateFrameChanges)
 
-          Button(action: { focused = nil }) {
-            Text("Dismiss keyboard").padding()
-          }
-          .disabled(focused == nil)
-
           Spacer()
 
           TextField("Text", text: $text)
-            .focused($focused, equals: .text)
           #endif
         }
         .frame(maxWidth: .infinity)
