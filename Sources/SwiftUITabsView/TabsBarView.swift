@@ -62,13 +62,20 @@ where Tab: Equatable & Identifiable,
   @Binding var selectedTab: Tab
   var tabItem: (Tab, Binding<Tab>) -> BarItem
 
+  var dividerAlignment: Alignment {
+    switch position {
+    case .top: return .bottom
+    case .bottom: return .top
+    }
+  }
+
   public var body: some View {
     HStack(spacing: 0) {
       ForEach(tabs) { tab in
         tabItem(tab, $selectedTab)
       }
     }
-    .overlay(Divider().frame(maxHeight: .infinity, alignment: .top))
+    .overlay(Divider().frame(maxHeight: .infinity, alignment: dividerAlignment))
     .background(.thinMaterial)
   }
 }
