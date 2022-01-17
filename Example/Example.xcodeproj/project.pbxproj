@@ -10,8 +10,9 @@
 		31B50279278B204900FE0A2E /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B50278278B204900FE0A2E /* Example.swift */; };
 		31B5027D278B204A00FE0A2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31B5027C278B204A00FE0A2E /* Assets.xcassets */; };
 		31C6663A2790DF310038AED6 /* SwiftUITabsView in Frameworks */ = {isa = PBXBuildFile; productRef = 31C666392790DF310038AED6 /* SwiftUITabsView */; };
-		31CD84C92794EB0A00124D55 /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CD84C82794EB0A00124D55 /* Example.swift */; };
 		31CD84CD2794EB0B00124D55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31CD84CC2794EB0B00124D55 /* Assets.xcassets */; };
+		31CD84D72794EE5300124D55 /* SwiftUITabsView in Frameworks */ = {isa = PBXBuildFile; productRef = 31CD84D62794EE5300124D55 /* SwiftUITabsView */; };
+		31CD84D92794EEB600124D55 /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B50278278B204900FE0A2E /* Example.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,7 +20,6 @@
 		31B50278278B204900FE0A2E /* Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
 		31B5027C278B204A00FE0A2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		31CD84C62794EB0A00124D55 /* ExampleApp-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ExampleApp-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		31CD84C82794EB0A00124D55 /* Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
 		31CD84CC2794EB0B00124D55 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		31CD84D12794EB0B00124D55 /* ExampleApp_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ExampleApp_macOS.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -37,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31CD84D72794EE5300124D55 /* SwiftUITabsView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +47,7 @@
 		31B5026C278B204900FE0A2E = {
 			isa = PBXGroup;
 			children = (
+				31CD84D82794EE8600124D55 /* ExampleApp */,
 				31B50277278B204900FE0A2E /* ExampleApp-iOS */,
 				31CD84C72794EB0A00124D55 /* ExampleApp-macOS */,
 				31B50276278B204900FE0A2E /* Products */,
@@ -65,7 +67,6 @@
 			isa = PBXGroup;
 			children = (
 				31B5027C278B204A00FE0A2E /* Assets.xcassets */,
-				31B50278278B204900FE0A2E /* Example.swift */,
 			);
 			path = "ExampleApp-iOS";
 			sourceTree = "<group>";
@@ -74,10 +75,17 @@
 			isa = PBXGroup;
 			children = (
 				31CD84CC2794EB0B00124D55 /* Assets.xcassets */,
-				31CD84C82794EB0A00124D55 /* Example.swift */,
 				31CD84D12794EB0B00124D55 /* ExampleApp_macOS.entitlements */,
 			);
 			path = "ExampleApp-macOS";
+			sourceTree = "<group>";
+		};
+		31CD84D82794EE8600124D55 /* ExampleApp */ = {
+			isa = PBXGroup;
+			children = (
+				31B50278278B204900FE0A2E /* Example.swift */,
+			);
+			path = ExampleApp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -116,6 +124,9 @@
 			dependencies = (
 			);
 			name = "ExampleApp-macOS";
+			packageProductDependencies = (
+				31CD84D62794EE5300124D55 /* SwiftUITabsView */,
+			);
 			productName = "ExampleApp-macOS";
 			productReference = 31CD84C62794EB0A00124D55 /* ExampleApp-macOS.app */;
 			productType = "com.apple.product-type.application";
@@ -189,7 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				31CD84C92794EB0A00124D55 /* Example.swift in Sources */,
+				31CD84D92794EEB600124D55 /* Example.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,6 +459,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		31C666392790DF310038AED6 /* SwiftUITabsView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftUITabsView;
+		};
+		31CD84D62794EE5300124D55 /* SwiftUITabsView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUITabsView;
 		};

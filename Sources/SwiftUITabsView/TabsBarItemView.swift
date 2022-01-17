@@ -56,8 +56,15 @@ where Tab: Equatable,
         }
         .containerShape(RoundedRectangle(cornerRadius: 4))
         .padding(4)
+        #if os(macOS)
+        // Workaround for SwiftUI macOS buttons with trasparent labels not handling touches:
+        .background(Color.white.opacity(0.001))
+        #endif
 
       Spacer(minLength: 0)
     }
+    #if os(macOS)
+    .buttonStyle(.plain)
+    #endif
   }
 }

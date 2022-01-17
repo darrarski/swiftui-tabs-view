@@ -78,6 +78,7 @@ struct ExampleTabView: View {
 
           Spacer()
 
+          #if os(iOS)
           Toggle("Ignore keyboard", isOn: $ignoreKeyboard.animation(
             animateFrameChanges ? .default : .none
           ))
@@ -92,7 +93,9 @@ struct ExampleTabView: View {
 
           TextField("Text", text: $text)
             .focused($focused, equals: .text)
+          #endif
         }
+        .frame(maxWidth: .infinity)
         .padding()
         .background(.regularMaterial)
         .mask(RoundedRectangle(cornerRadius: 10))
@@ -140,6 +143,9 @@ struct ExampleTabsView: View {
         )
       }
     )
+    #if os(macOS)
+      .frame(width: 640, height: 480)
+    #endif
   }
 }
 
