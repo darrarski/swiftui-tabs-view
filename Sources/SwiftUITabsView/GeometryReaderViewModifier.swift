@@ -55,7 +55,7 @@ struct GeometryReaderModifier_Previews: PreviewProvider {
       VStack {
         Text("Hello, World!")
           .font(.largeTitle)
-          .background(Color(.secondarySystemBackground))
+          .background(Color.accentColor.opacity(0.15))
           .geometryReader(
             geometry: \.size,
             onChange: { size = $0 }
@@ -64,13 +64,16 @@ struct GeometryReaderModifier_Previews: PreviewProvider {
         Text("\(Int(size.width.rounded())) x \(Int(size.height.rounded()))")
           .font(.caption)
           .frame(width: size.width, height: size.height)
-          .background(Color(.secondarySystemBackground))
+          .background(Color.accentColor.opacity(0.15))
       }
     }
   }
 
   static var previews: some View {
     Preview()
+    #if os(macOS)
+      .frame(width: 640, height: 480)
+    #endif
   }
 }
 #endif

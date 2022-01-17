@@ -1,11 +1,13 @@
 # SwiftUI Tabs View
 
 ![Swift 5.5](https://img.shields.io/badge/swift-5.5-orange.svg)
-![platform iOS 15](https://img.shields.io/badge/platform-iOS_15-blue.svg)
+![platform iOS 15 | macOS 12.1](https://img.shields.io/badge/platform-iOS_15_|_macOS_12-blue.svg)
 
 SwiftUI tabbed interface. Customizable replacement for `SwiftUI.TabView`.
 
-![Example iOS app light mode](Misc/ExampleApp-iOS-light.gif#gh-light-mode-only)![Example iOS app dark mode](Misc/ExampleApp-iOS-dark.gif#gh-dark-mode-only)
+|iOS|macOS|
+|:-:|:-:|
+|![Example iOS app light mode](Misc/ExampleApp-iOS-light.gif#gh-light-mode-only)![Example iOS app dark mode](Misc/ExampleApp-iOS-dark.gif#gh-dark-mode-only)|![Example macOS app light mode](Misc/ExampleApp-macOS-light.gif#gh-light-mode-only)![Example macOS app dark mode](Misc/ExampleApp-macOS-dark.gif#gh-dark-mode-only)|
 
 - Build with vanilla `SwiftUI` (no external dependencies).
 - Replaces `SwiftUI.TabView`.
@@ -36,13 +38,15 @@ struct ContentView: View {
 }
 ```
 
-Check out [documentation comments](Sources/SwiftUITabsView/TabsView.swift) and the included [example app](Example/ExampleApp-iOS/Example.swift).
+Check out [documentation comments](Sources/SwiftUITabsView/TabsView.swift) and the included [example app](Example/ExampleApp/Example.swift).
 
 ## 🛠 Development
 
 Open `SwiftUITabsView.xcworkspace` in Xcode (≥13.1) for development.
 
-Use `ExampleApp-iOS` scheme to build and run the example application.
+Use `ExampleApp-iOS` scheme to build and run the iOS example application.
+
+Use `ExampleApp-macOS` scheme to build and run the macOS example application.
 
 ## ☕️ Do you like the project?
 

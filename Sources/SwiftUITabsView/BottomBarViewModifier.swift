@@ -99,6 +99,9 @@ struct BottomBarViewModifier_Previews: PreviewProvider {
         .frame(maxWidth: .infinity)
         .background(.ultraThinMaterial)
     }
+    #if os(macOS)
+    .frame(width: 640, height: 480)
+    #endif
   }
 }
 #endif
