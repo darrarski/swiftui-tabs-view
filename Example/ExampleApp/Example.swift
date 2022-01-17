@@ -49,20 +49,20 @@ enum ExampleTab: String, Equatable, Identifiable, CaseIterable {
 struct ExampleTabView: View {
   init(
     tab: ExampleTab,
-    tabsPosition: Binding<ToolbarPosition>,
+    barPosition: Binding<ToolbarPosition>,
     ignoreKeyboard: Binding<Bool>,
     animateFrameChanges: Binding<Bool>,
     text: Binding<String>
   ) {
     self.tab = tab
-    self._tabsPosition = tabsPosition
+    self._barPosition = barPosition
     self._ignoreKeyboard = ignoreKeyboard
     self._animateFrameChanges = animateFrameChanges
     self._text = text
   }
 
   var tab: ExampleTab
-  @Binding var tabsPosition: ToolbarPosition
+  @Binding var barPosition: ToolbarPosition
   @Binding var ignoreKeyboard: Bool
   @Binding var animateFrameChanges: Bool
   @Binding var text: String
@@ -74,7 +74,7 @@ struct ExampleTabView: View {
           Text(tab.title)
             .font(.largeTitle)
 
-          Picker("Tabs bar postion", selection: $tabsPosition) {
+          Picker("Tabs bar position", selection: $barPosition) {
             Text("Bottom").tag(ToolbarPosition.bottom)
             Text("Top").tag(ToolbarPosition.top)
           }
@@ -118,7 +118,7 @@ struct ExampleTabsView: View {
     TabsView(
       tabs: ExampleTab.allCases,
       selectedTab: $selectedTab,
-      tabsPosition: tabsPosition,
+      barPosition: tabsPosition,
       ignoresKeyboard: ignoreKeyboard,
       frameChangeAnimation: animateFrameChanges ? .default : .none,
       tabsBar: TabsBarView.default { tab, isSelected in
@@ -134,7 +134,7 @@ struct ExampleTabsView: View {
       content: { tab in
         ExampleTabView(
           tab: tab,
-          tabsPosition: $tabsPosition.animation(),
+          barPosition: $tabsPosition.animation(),
           ignoreKeyboard: $ignoreKeyboard,
           animateFrameChanges: $animateFrameChanges,
           text: .init(
