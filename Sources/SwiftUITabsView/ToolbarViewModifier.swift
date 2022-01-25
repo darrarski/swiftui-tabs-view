@@ -81,7 +81,7 @@ struct ToolbarViewModifier<Bar: View>: ViewModifier {
     ZStack {
       content
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .tabsBarSafeAreaInset(position: position)
+        .tabsBarSafeAreaInset()
         .geometryReader(
           geometry: { $0.frame(in: .global) },
           onChange: { frame in

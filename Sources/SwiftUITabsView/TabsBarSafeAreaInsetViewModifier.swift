@@ -12,7 +12,7 @@ extension EnvironmentValues {
 }
 
 struct TabsBarSafeAreaInsetViewModifier: ViewModifier {
-  var position: ToolbarPosition
+  @Environment(\.toolbarPosition) var position
   @Environment(\.tabsBarSafeAreaInset) var tabsBarSafeAreaInset
 
   func body(content: Content) -> some View {
@@ -44,11 +44,8 @@ extension View {
   /// )
   /// ```
   ///
-  /// - Parameter position: Toolbar position (default is `.bottom`).
   /// - Returns: View with additional safe area insets matching the tabs bar.
-  public func tabsBarSafeAreaInset(
-    position: ToolbarPosition = .bottom
-  ) -> some View {
-    modifier(TabsBarSafeAreaInsetViewModifier(position: position))
+  public func tabsBarSafeAreaInset() -> some View {
+    modifier(TabsBarSafeAreaInsetViewModifier())
   }
 }
