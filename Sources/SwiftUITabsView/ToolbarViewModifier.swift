@@ -68,6 +68,7 @@ struct ToolbarViewModifier<Bar: View>: ViewModifier {
   @Environment(\.toolbarPosition) var position
   @State var contentFrame: CGRect?
   @State var tabsBarFrame: CGRect?
+  @State var tabsBarSafeAreaInset: CGSize = .zero
 
   var keyboardSafeAreaEdges: Edge.Set {
     guard ignoresKeyboard else { return [] }
@@ -87,6 +88,7 @@ struct ToolbarViewModifier<Bar: View>: ViewModifier {
           onChange: { frame in
             withAnimation(contentFrame == nil ? .none : frameChangeAnimation) {
               contentFrame = frame
+              tabsBarSafeAreaInset = makeTabsBarSafeAreaInset()
             }
           }
         )
@@ -97,23 +99,26 @@ struct ToolbarViewModifier<Bar: View>: ViewModifier {
           onChange: { frame in
             withAnimation(tabsBarFrame == nil ? .none : frameChangeAnimation) {
               tabsBarFrame = frame
+              tabsBarSafeAreaInset = makeTabsBarSafeAreaInset()
             }
           }
         )
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: position.frameAlignment)
         .ignoresSafeArea(.keyboard, edges: keyboardSafeAreaEdges)
     }
-    .environment(\.tabsBarSafeAreaInset, {
-      guard let contentFrame = contentFrame,
-            let tabsBarFrame = tabsBarFrame
-      else { return .zero }
+    .environment(\.tabsBarSafeAreaInset, tabsBarSafeAreaInset)
+  }
 
-      var size = contentFrame.intersection(tabsBarFrame).size
-      size.width = max(0, size.width)
-      size.height = max(0, size.height)
+  func makeTabsBarSafeAreaInset() -> CGSize {
+    guard let contentFrame = contentFrame,
+          let tabsBarFrame = tabsBarFrame
+    else { return .zero }
 
-      return size
-    }())
+    var size = contentFrame.intersection(tabsBarFrame).size
+    size.width = max(0, size.width)
+    size.height = max(0, size.height)
+
+    return size
   }
 }
 
