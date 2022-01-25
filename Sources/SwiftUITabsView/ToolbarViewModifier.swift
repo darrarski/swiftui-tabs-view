@@ -23,6 +23,17 @@ public enum ToolbarPosition: Equatable {
   }
 }
 
+struct ToolbarPositionKey: EnvironmentKey {
+  static var defaultValue: ToolbarPosition = .bottom
+}
+
+extension EnvironmentValues {
+  var toolbarPosition: ToolbarPosition {
+    get { self[ToolbarPositionKey.self] }
+    set { self[ToolbarPositionKey.self] = newValue }
+  }
+}
+
 extension View {
   func toolbar<Bar: View>(
     position: ToolbarPosition = .bottom,
@@ -31,32 +42,30 @@ extension View {
     @ViewBuilder bar: @escaping () -> Bar
   ) -> some View {
     modifier(ToolbarViewModifier(
-      position: position,
       ignoresKeyboard: ignoresKeyboard,
       frameChangeAnimation: frameChangeAnimation,
       bar: bar
     ))
+      .environment(\.toolbarPosition, position)
   }
 }
 
 struct ToolbarViewModifier<Bar: View>: ViewModifier {
   init(
-    position: ToolbarPosition = .bottom,
     ignoresKeyboard: Bool = true,
     frameChangeAnimation: Animation? = .default,
     @ViewBuilder bar: @escaping () -> Bar
   ) {
-    self.position = position
     self.ignoresKeyboard = ignoresKeyboard
     self.frameChangeAnimation = frameChangeAnimation
     self.bar = bar
   }
 
-  var position: ToolbarPosition
   var ignoresKeyboard: Bool
   var frameChangeAnimation: Animation?
   var bar: () -> Bar
 
+  @Environment(\.toolbarPosition) var position
   @State var contentFrame: CGRect?
   @State var tabsBarFrame: CGRect?
 
