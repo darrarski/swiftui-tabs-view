@@ -60,18 +60,6 @@ struct ToolbarViewModifier<Bar: View>: ViewModifier {
   @State var contentFrame: CGRect?
   @State var tabsBarFrame: CGRect?
 
-  var barSafeArea: CGSize {
-    guard let contentFrame = contentFrame,
-          let tabsBarFrame = tabsBarFrame
-    else { return .zero }
-
-    var size = contentFrame.intersection(tabsBarFrame).size
-    size.width = max(0, size.width)
-    size.height = max(0, size.height)
-
-    return size
-  }
-
   var keyboardSafeAreaEdges: Edge.Set {
     guard ignoresKeyboard else { return [] }
     switch position {
@@ -84,12 +72,7 @@ struct ToolbarViewModifier<Bar: View>: ViewModifier {
     ZStack {
       content
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .safeAreaInset(edge: position.verticalEdge) {
-          Color.clear.frame(
-            width: barSafeArea.width,
-            height: barSafeArea.height
-          )
-        }
+        .tabsBarSafeAreaInset(position: position)
         .geometryReader(
           geometry: { $0.frame(in: .global) },
           onChange: { frame in
@@ -111,6 +94,17 @@ struct ToolbarViewModifier<Bar: View>: ViewModifier {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: position.frameAlignment)
         .ignoresSafeArea(.keyboard, edges: keyboardSafeAreaEdges)
     }
+    .environment(\.tabsBarSafeAreaInset, {
+      guard let contentFrame = contentFrame,
+            let tabsBarFrame = tabsBarFrame
+      else { return .zero }
+
+      var size = contentFrame.intersection(tabsBarFrame).size
+      size.width = max(0, size.width)
+      size.height = max(0, size.height)
+
+      return size
+    }())
   }
 }
 
