@@ -41,6 +41,20 @@ struct ContentView: View {
 
 Check out [documentation comments](Sources/SwiftUITabsView/TabsView.swift) and the included [example app](Example/ExampleApp/Example.swift).
 
+If your tab's content view is embedded in `NavigationView`, use [tabsBarSafeAreaInset](Sources/SwiftUITabsView/TabsBarSafeAreaInsetViewModifier.swift) modifier to apply safe area insets that matches the tabs bar:
+
+```swift
+TabsView(
+  /* ... */
+  content: { tab in 
+    NavigationView {
+      ContentView(for: tab)
+        .tabsBarSafeAreaInset()
+    }
+  }
+)
+```
+
 ## 🛠 Development
 
 Open `SwiftUITabsView.xcworkspace` in Xcode (≥13.1) for development.
